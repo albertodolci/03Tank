@@ -8,6 +8,7 @@
 
 ATankC * ATankAIC::GetPlayerTank() const
 {
+
 	auto controller = GetWorld()->GetFirstPlayerController();
 	return Cast<ATankC>   (   controller->GetPawn()  );
 
@@ -28,6 +29,18 @@ void ATankAIC::BeginPlay()
 	else
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Non trovato!") );
+	}
+
+}
+
+void ATankAIC::Tick(float DeltaTime)
+{
+
+	Super::Tick(DeltaTime);
+
+	if (GetPlayerTank() && GetTank())
+	{
+     	GetTank()->AimAt( GetPlayerTank()->GetActorLocation() );
 	}
 
 }

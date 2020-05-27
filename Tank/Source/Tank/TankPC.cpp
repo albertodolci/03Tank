@@ -35,8 +35,7 @@ void ATankPC::Mira()
 
 	if ( TrovaVista( HitLocation ) )
 	{
-		UE_LOG(LogTemp, Warning,
-			TEXT("Zona Colpita %s"), *HitLocation.ToString());
+		GetTank()->AimAt(HitLocation);
     }
 
 }
@@ -48,15 +47,18 @@ bool ATankPC::TrovaVista(FVector & Location)
 	GetViewportSize(viewX,viewY);
 	FVector2D AimZone = FVector2D(viewX*crossX, viewY*crossY);
 
-	//convertire tale zona in un vettore 3D	FVector Direzione;
+	//convertire tale zona in un vettore 3D	//FVector rrrrr;
+	FVector Direzione;
+
 	TrovaDirezione(AimZone, Direzione);
 
 	//creare un line trace in quella direzione
 	FVector HitLocation;
 
-	if ( !TrovaHit(Direzione, HitLocation) ) return false;
+	if ( !TrovaHit( Direzione , HitLocation ) ) return false;
 
 	Location = HitLocation;
+
 	return true;
 }
 

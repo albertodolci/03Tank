@@ -19,7 +19,26 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	class UMeshTorretta* Cannone = nullptr;
+
+	UPROPERTY(EditAnywhere, Category = "SetUp")
+		TSubclassOf<class AProiettile>  Projectile;
+ 
 public:	
+
+	UFUNCTION(BlueprintCallable)
+		void SetCannone(UMeshTorretta* Cannon);
+
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	      class UAimingComponent* AimingC;
+
+	void AimAt(FVector HitLocation);
+
+	UFUNCTION(BlueprintCallable,Category = "Fuoco")
+	void Spara();
+	
+
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 

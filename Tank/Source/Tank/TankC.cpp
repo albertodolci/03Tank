@@ -12,39 +12,44 @@ ATankC::ATankC()
  	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 	AimingC = CreateDefaultSubobject<UAimingComponent>(TEXT("AimingC"));
+
+	ReloadTime = 2.f;
+
 }
 
 // Called when the game starts or when spawned
 void ATankC::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
+	Reload = 0;
+
+
 }
 
 void ATankC::AimAt(FVector HitLocation)
 {
 	AimingC->AimAt(HitLocation);
-
 }
 
-void ATankC::SetCannone(UMeshTorretta* Cannon)
-{
-	Cannone = Cannon;
-
-}
 
 void ATankC::Spara()
 {
-	UE_LOG(LogTemp, Error, (TEXT("Sparo a Salve!!")));
+	//	UE_LOG(LogTemp, Error, (TEXT("Sparo a Salve!!")));
 
-	auto Gianfranco = GetWorld()->SpawnActor<AProiettile>(
+	if (Projectile  && GetWorld() && Reload <= 0)
+	{
+	
+	    auto Bullet = GetWorld()->SpawnActor<AProiettile>(
 		Projectile,
-		Cannone->GetSocketLocation(FName("Proiettile")),
-		Cannone->GetSocketRotation(FName("Proiettile"))
+		AimingC->GetCannone()->GetSocketLocation(FName("Proiettile")),
+		AimingC->GetCannone()->GetSocketRotation(FName("Proiettile"))
 		);
 
-	Gianfranco->Lancio(AimingC->VelLancio);
+	    Bullet->Lancio(AimingC->VelLancio);
 
+		Reload = ReloadTime;
+    }
 
 }
 
@@ -52,6 +57,7 @@ void ATankC::Spara()
 void ATankC::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	if (Reload > 0) Reload -= DeltaTime;
 
 }
 
@@ -59,6 +65,5 @@ void ATankC::Tick(float DeltaTime)
 void ATankC::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
-
 }
 

@@ -4,16 +4,15 @@
 #include "TankAIC.h"
 #include "TankC.h"
 #include "Engine/World.h"
-
+#include "TankPC.h"
 
 ATankC * ATankAIC::GetPlayerTank() const
 {
 
-	auto controller = GetWorld()->GetFirstPlayerController();
-	return Cast<ATankC>   (   controller->GetPawn()  );
-
+	APlayerController* controller = GetWorld()->GetFirstPlayerController();
+	return Cast<ATankC>(controller->GetPawn());
+	
 }
-
 
 void ATankAIC::BeginPlay()
 {
@@ -35,17 +34,31 @@ void ATankAIC::BeginPlay()
 
 void ATankAIC::Tick(float DeltaTime)
 {
-
+	
 	Super::Tick(DeltaTime);
 
-	if (GetPlayerTank() && GetTank())
+	if ( GetPlayerTank() && GetTank() )
 	{
-     	GetTank()->AimAt( GetPlayerTank()->GetActorLocation() );
+
+     	GetTank()->AimAt(GetPlayerTank()->GetActorLocation());
+
+		if (Timer > 0) Timer -= DeltaTime;
+		else
+		{
+			GetTank()->Spara();
+			Timer = FMath::FRandRange(3.f, 6.f);
+		}
 	}
 
 }
 
 
+ATankAIC::ATankAIC()
+{
+	Timer = FMath::FRandRange(3.f,6.f);
+
+
+}
 
 ATankC* ATankAIC::GetTank() const
 {

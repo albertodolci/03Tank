@@ -20,7 +20,7 @@ UAimingComponent::UAimingComponent()
 void UAimingComponent::BeginPlay()
 {
 	Super::BeginPlay();
-	UE_LOG(LogTemp, Warning, TEXT("AimingC Activate %s"), *GetOwner()->GetName());
+	//UE_LOG(LogTemp, Warning, TEXT("AimingC Activate %s"), *GetOwner()->GetName());
 	// ...
 	
 }
@@ -64,7 +64,7 @@ void UAimingComponent::AimAt(FVector HitLocation)
 void UAimingComponent::RuotaCannone(FVector &Velocity)
 {
 	FVector AimDirection = Velocity.GetSafeNormal();
-	UE_LOG(LogTemp, Warning, TEXT("Angolazione %s"), *AimDirection.ToString());
+	//UE_LOG(LogTemp, Warning, TEXT("Angolazione %s"), *AimDirection.ToString());
 
 	FRotator RotAttuale = Cannone->GetForwardVector().Rotation();
 	FRotator RotObbiettivo = AimDirection.Rotation();

@@ -6,6 +6,17 @@
 #include "Engine/World.h"
 #include "TankPC.h"
 
+
+
+ATankAIC::ATankAIC()
+{
+	Timer = FMath::FRandRange(3.f, 6.f);
+	RaggioMax = 1000.f;
+	PrimaryActorTick.bCanEverTick = true;
+}
+
+
+
 ATankC * ATankAIC::GetPlayerTank() const
 {
 
@@ -16,6 +27,9 @@ ATankC * ATankAIC::GetPlayerTank() const
 
 void ATankAIC::BeginPlay()
 {
+
+	Super::BeginPlay();
+
 	auto CarroControllato = GetTank();
 	auto CarroNemico = GetPlayerTank();
 
@@ -37,10 +51,22 @@ void ATankAIC::Tick(float DeltaTime)
 	
 	Super::Tick(DeltaTime);
 
-	if ( GetPlayerTank() && GetTank() )
+	auto Bersaglio = GetPlayerTank();
+
+	if (Bersaglio && GetTank() )
 	{
 
-     	GetTank()->AimAt(GetPlayerTank()->GetActorLocation());
+     	GetTank()->AimAt(Bersaglio->GetActorLocation());
+		
+		MoveToActor(Bersaglio, RaggioMax);
+		//UE_LOG(LogTemp, Error, TEXT("path = %i"), path);
+
+
+
+		//MoveToActor(Bersaglio, 0);
+		//path =  MoveToLocation(Bersaglio->GetActorLocation());
+
+		//UE_LOG(LogTemp, Error, TEXT("path = %i"), path);
 
 		if (Timer > 0) Timer -= DeltaTime;
 		else
@@ -48,15 +74,10 @@ void ATankAIC::Tick(float DeltaTime)
 			GetTank()->Spara();
 			Timer = FMath::FRandRange(3.f, 6.f);
 		}
+
+		
+
 	}
-
-}
-
-
-ATankAIC::ATankAIC()
-{
-	Timer = FMath::FRandRange(3.f,6.f);
-
 
 }
 

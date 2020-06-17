@@ -21,6 +21,9 @@ public:
 
 	ATankAIC();
 
+	UPROPERTY(EditAnyWhere,Category = "AI")
+	float RaggioMax;
+
 	class ATankC* GetTank() const;
 
 	class ATankC* GetPlayerTank() const;

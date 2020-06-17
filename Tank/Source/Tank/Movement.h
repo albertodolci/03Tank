@@ -9,9 +9,30 @@
 /**
  * 
  */
-UCLASS()
+UCLASS(meta = (BlueprintSpawnableComponent))
 class TANK_API UMovement : public UNavMovementComponent
 {
 	GENERATED_BODY()
 	
+
+public:
+
+	//UMovement();
+
+	class UMeshCingolo* CingoloDX;
+
+	class UMeshCingolo* CingoloSX;
+
+	UFUNCTION(BlueprintCallable, Category = "Controlli")
+	void MovimentoLaterale(float movimentoA);
+
+	UFUNCTION(BlueprintCallable, Category = "Controlli")
+	void MovimentoAvanti(float movimentoA);
+
+	UFUNCTION(BlueprintCallable, Category = "Controlli")
+	void SetCingoli(UMeshCingolo* refSX , UMeshCingolo* refDX);
+
+	virtual void RequestDirectMove(const FVector& MoveVelocity, bool bForceMaxSpeed) override;
+	// Called every frame
+	//virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 };

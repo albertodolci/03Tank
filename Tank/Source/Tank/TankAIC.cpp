@@ -5,17 +5,20 @@
 #include "TankC.h"
 #include "Engine/World.h"
 #include "TankPC.h"
-
+#include "AimingComponent.h"
 
 
 ATankAIC::ATankAIC()
 {
 	Timer = FMath::FRandRange(3.f, 6.f);
-	RaggioMax = 1000.f;
+	RaggioMin = 1000.f;
+	RaggioFuoco = 30000.f;
 	PrimaryActorTick.bCanEverTick = true;
+
+	R_MIN = 3.f;
+	R_MAX = 6.f;
+
 }
-
-
 
 ATankC * ATankAIC::GetPlayerTank() const
 {
@@ -46,6 +49,20 @@ void ATankAIC::BeginPlay()
 
 }
 
+void ATankAIC::SetPawn(APawn * InPawn)
+{
+	Super::SetPawn(InPawn);
+
+	if (InPawn)
+	{
+		auto CarroControllato = GetTank();
+		if (!CarroControllato) return;
+		CarroControllato->OnDeath.AddUniqueDynamic(this, &ATankAIC::OnPossessedTankDeath);
+		UE_LOG(LogTemp, Warning, TEXT("Set Pawn abilitato!"));
+	}
+
+}
+
 void ATankAIC::Tick(float DeltaTime)
 {
 	
@@ -56,29 +73,43 @@ void ATankAIC::Tick(float DeltaTime)
 	if (Bersaglio && GetTank() )
 	{
 
-     	GetTank()->AimAt(Bersaglio->GetActorLocation());
+     	GetTank()->AimingC->AimAt(Bersaglio->GetActorLocation());
 		
-		MoveToActor(Bersaglio, RaggioMax);
-		//UE_LOG(LogTemp, Error, TEXT("path = %i"), path);
-
-
-
-		//MoveToActor(Bersaglio, 0);
-		//path =  MoveToLocation(Bersaglio->GetActorLocation());
-
-		//UE_LOG(LogTemp, Error, TEXT("path = %i"), path);
-
+		MoveToActor(Bersaglio, RaggioMin);
+		
 		if (Timer > 0) Timer -= DeltaTime;
 		else
 		{
-			GetTank()->Spara();
-			Timer = FMath::FRandRange(3.f, 6.f);
+
+			float dist = FVector::Dist(Bersaglio->GetActorLocation(), GetTank()->GetActorLocation());
+
+			if (GetTank()->AimingC->GetStato() == EAimingStatus::mira && dist < RaggioFuoco)
+			{
+				GetTank()->AimingC->Spara();
+				Timer = FMath::FRandRange(R_MIN, R_MAX);
+			}
+
+
 		}
 
 		
 
 	}
 
+}
+
+void ATankAIC::OnPossessedTankDeath()
+{
+	UE_LOG(LogTemp, Warning, TEXT("Evento On  Death"));
+
+	if (GetPawn())
+	{
+
+	GetTank()->DestroyDelay();
+	GetPawn()->DetachFromControllerPendingDestroy();
+
+
+    }
 }
 
 ATankC* ATankAIC::GetTank() const

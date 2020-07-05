@@ -6,38 +6,48 @@
 #include "GameFramework/Pawn.h"
 #include "TankC.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FTankCDelegate);
+
 UCLASS()
 class TANK_API ATankC : public APawn
 {
 	GENERATED_BODY()
 
+	bool ismorto;
+
 public:
 	// Sets default values for this pawn's properties
 	ATankC();
+
+	FTankCDelegate OnDeath;
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	UPROPERTY(EditAnywhere, Category = "SetUp")
-		TSubclassOf<class AProiettile>  Projectile;
- 
+	UPROPERTY(EditAnywhere,Category = "Stats")
+	float Resistenza;
+
+	float ResistenzaAttaule;
 public:	
+
+	UFUNCTION(BlueprintPure, Category = "Stats")
+	float GetPercent();
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void DestroyDelay();
+
+	virtual float TakeDamage(float DamageAmount,
+		struct FDamageEvent const & DamageEvent,
+		class AController * EventInstigator,
+		AActor* DamageCauser) override;
+
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	      class UAimingComponent* AimingC;
 
-	UPROPERTY(EditAnywhere, Category = "SetUp")
-	float ReloadTime;
-
-	float Reload;
-
-
-	void AimAt(FVector HitLocation);
-
-	UFUNCTION(BlueprintCallable,Category = "Fuoco")
-	void Spara();
-	
+	//UFUNCTION(BlueprintCallable,Category = "Fuoco")
+	//void Spara();
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 

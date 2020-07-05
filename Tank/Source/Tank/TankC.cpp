@@ -3,62 +3,54 @@
 
 #include "TankC.h"
 #include "AimingComponent.h"
-#include "Proiettile.h"
-#include "MeshTorretta.h"
 
 // Sets default values
+
 ATankC::ATankC()
 {
  	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 	AimingC = CreateDefaultSubobject<UAimingComponent>(TEXT("AimingC"));
-
-	ReloadTime = 2.f;
-
+	Resistenza = 50.f;
+	ismorto = false;
 }
 
 // Called when the game starts or when spawned
 void ATankC::BeginPlay()
 {
 	Super::BeginPlay();
-
-	Reload = 0;
-
-
+	ResistenzaAttaule = Resistenza;
 }
 
-void ATankC::AimAt(FVector HitLocation)
+float ATankC::GetPercent()
 {
-	AimingC->AimAt(HitLocation);
+	return  ResistenzaAttaule / Resistenza;
 }
 
-
-void ATankC::Spara()
+float ATankC::TakeDamage(float DamageAmount, FDamageEvent const & DamageEvent, AController * EventInstigator, AActor * DamageCauser)
 {
-	//	UE_LOG(LogTemp, Error, (TEXT("Sparo a Salve!!")));
+	int16 Danni = FPlatformMath::RoundToInt(DamageAmount);
+	Danni = FMath::Clamp<int16>(Danni, 0, ResistenzaAttaule);
 
-	if (Projectile  && GetWorld() && Reload <= 0)
+	ResistenzaAttaule -= Danni;
+
+	if (ResistenzaAttaule <= 0  && !ismorto) 
 	{
-	
-	    auto Bullet = GetWorld()->SpawnActor<AProiettile>(
-		Projectile,
-		AimingC->GetCannone()->GetSocketLocation(FName("Proiettile")),
-		AimingC->GetCannone()->GetSocketRotation(FName("Proiettile"))
-		);
+		ismorto = true;
+		UE_LOG(LogTemp, Error, TEXT("Sono Morto"));
+		OnDeath.Broadcast();
+	}
+		
 
-	    Bullet->Lancio(AimingC->VelLancio);
-
-		Reload = ReloadTime;
-    }
-
+	return Danni;
 }
+
+
 
 // Called every frame
 void ATankC::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	if (Reload > 0) Reload -= DeltaTime;
-
 }
 
 // Called to bind functionality to input

@@ -8,8 +8,8 @@ void UMovement::MovimentoLaterale(float movimentoA)
 {
 	//UE_LOG(LogTemp, Warning, TEXT("Avanti %f"), movimentoA);
 	if (!CingoloDX || !CingoloSX) return;
-	CingoloDX->RichiestaMovimento(-movimentoA);
-	CingoloSX->RichiestaMovimento(movimentoA);
+	CingoloDX->RichiestaMovimentoRG(-movimentoA);
+	CingoloSX->RichiestaMovimentoRG(movimentoA);
 
 }
 
@@ -17,8 +17,8 @@ void UMovement::MovimentoAvanti(float movimentoA)
 {
 	//UE_LOG(LogTemp, Warning, TEXT("Laterale %f"), movimentoA);
 	if (!CingoloDX || !CingoloSX) return;
-	CingoloDX->RichiestaMovimento(movimentoA);
-	CingoloSX->RichiestaMovimento(movimentoA);
+	CingoloDX->RichiestaMovimentoFW(movimentoA);
+	CingoloSX->RichiestaMovimentoFW(movimentoA);
 }
 
 void UMovement::SetCingoli(UMeshCingolo * refSX, UMeshCingolo * refDX)
@@ -30,7 +30,7 @@ void UMovement::SetCingoli(UMeshCingolo * refSX, UMeshCingolo * refDX)
 void UMovement::RequestDirectMove(const FVector & MoveVelocity, bool bForceMaxSpeed)
 {
 	//Super::RequestDirectMove(MoveVelocity, bForceMaxSpeed);
-	UE_LOG(LogTemp, Warning, TEXT("%s velocity %s"),*GetOwner()->GetName(), *MoveVelocity.GetSafeNormal().ToString());
+	//UE_LOG(LogTemp, Warning, TEXT("%s velocity %s"),*GetOwner()->GetName(), *MoveVelocity.GetSafeNormal().ToString());
 
 	FVector IntAvanti = MoveVelocity.GetSafeNormal();
 	FVector TankAvanti = GetOwner()->GetActorForwardVector().GetSafeNormal();

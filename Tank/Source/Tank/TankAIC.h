@@ -14,7 +14,6 @@ class TANK_API ATankAIC : public AAIController
 {
 	GENERATED_BODY()
 
-
 	float Timer;
 
 public:
@@ -22,7 +21,10 @@ public:
 	ATankAIC();
 
 	UPROPERTY(EditAnyWhere,Category = "AI")
-	float RaggioMax;
+	float RaggioMin;
+
+	UPROPERTY(EditAnyWhere, Category = "AI")
+	float RaggioFuoco;
 
 	class ATankC* GetTank() const;
 
@@ -30,7 +32,19 @@ public:
 
 	virtual void  BeginPlay() override;
 
+	UPROPERTY(EditAnyWhere, Category = "AI")
+	float R_MIN;
+
+	UPROPERTY(EditAnyWhere, Category = "AI")
+	float R_MAX;
+
+	virtual void  SetPawn(APawn* InPawn) override;
+
+	UFUNCTION()
+	void OnPossessedTankDeath();
+
 	virtual void  Tick(float DeltaTime) override;
 
+	
 
 };

@@ -28,6 +28,9 @@ public:
 
 	ATankPC();
 
+	UFUNCTION(BlueprintPure, Category = "SetUp")
+	class UAimingComponent* GetMirino();
+
 	class ATankC* GetTank() const;
 
 	virtual void  BeginPlay() override;
@@ -41,6 +44,11 @@ public:
 	bool TrovaDirezione(FVector2D ScreenLocation, FVector& Direzione);
 
 	bool TrovaHit(FVector Direzione, FVector& HitLocation);
+
+	virtual void  SetPawn(APawn* InPawn) override;
+
+	UFUNCTION()
+	void OnPossessedTankDeath();
 
 
 };

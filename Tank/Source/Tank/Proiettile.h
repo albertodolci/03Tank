@@ -10,7 +10,12 @@ UCLASS()
 class TANK_API AProiettile : public AActor
 {
 	GENERATED_BODY()
-	
+
+
+
+		UPROPERTY(EditAnywhere, Category = "Sparo")
+		float Damage;
+
 public:	
 	// Sets default values for this actor's properties
 	AProiettile();
@@ -22,10 +27,28 @@ protected:
 	UPROPERTY(VisibleAnywhere,Category = "Sparo")
 	class UProjectileMovementComponent* Movimento = nullptr;
 
+	UPROPERTY(VisibleAnywhere, Category = "Sparo")
+	class UStaticMeshComponent* Mesh = nullptr;
+
+	UPROPERTY(VisibleAnywhere, Category = "Sparo")
+	class UParticleSystemComponent* BlastLaunch = nullptr;
+
+	UPROPERTY(VisibleAnywhere, Category = "Sparo")
+	class UParticleSystemComponent* BlastImpact = nullptr;
+
+
+	UPROPERTY(VisibleAnywhere, Category = "Sparo")
+	class URadialForceComponent* ForzaEsplosiva = nullptr;
+
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+
 	void Lancio(float speed);
+
+	UFUNCTION()
+	void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
 
 };

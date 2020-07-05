@@ -4,7 +4,7 @@
 #include "AimingComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "MeshTorretta.h"
-
+#include "Proiettile.h"
 
 // Sets default values for this component's properties
 UAimingComponent::UAimingComponent()
@@ -13,13 +13,35 @@ UAimingComponent::UAimingComponent()
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
 	VelLancio = 100000.f;
-	// ...
+	ReloadTime = 2.f;
+	Munizioni  = 10;
+}
+
+void UAimingComponent::SetStato(uint8 New_Status)
+{
+	switch (New_Status)
+	{
+	case 0:
+		miamira = EAimingStatus::movimento;
+	break;
+
+	case 1:
+		miamira = EAimingStatus::mira;
+	break;
+
+	case 2:
+		miamira = EAimingStatus::ricarica;
+	break;
+
+	}
 }
 
 // Called when the game starts
 void UAimingComponent::BeginPlay()
 {
 	Super::BeginPlay();
+	Reload = 0;
+	SetStato(0);
 	//UE_LOG(LogTemp, Warning, TEXT("AimingC Activate %s"), *GetOwner()->GetName());
 	// ...
 	
@@ -29,8 +51,34 @@ void UAimingComponent::BeginPlay()
 void UAimingComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-
+	if (Reload > 0) Reload -= DeltaTime;
 	// ...
+}
+
+
+
+void UAimingComponent::Spara()
+{
+	//	UE_LOG(LogTemp, Error, (TEXT("Sparo a Salve!!")));
+
+	if (Projectile  && GetWorld() && Reload <= 0 && Munizioni > 0)
+	{
+
+		auto Bullet = GetWorld()->SpawnActor<AProiettile>(
+			Projectile,
+			GetCannone()->GetSocketLocation(FName("Proiettile")),
+			GetCannone()->GetSocketRotation(FName("Proiettile"))
+			);
+
+		Munizioni--;
+
+		UE_LOG(LogTemp, Error, TEXT("ammo = %i"), Munizioni);
+
+		Bullet->Lancio(VelLancio);
+
+		Reload = ReloadTime;
+	}
+
 }
 
 void UAimingComponent::AimAt(FVector HitLocation)
@@ -69,6 +117,13 @@ void UAimingComponent::RuotaCannone(FVector &Velocity)
 	FRotator RotAttuale = Cannone->GetForwardVector().Rotation();
 	FRotator RotObbiettivo = AimDirection.Rotation();
 	FRotator DeltaRot = RotObbiettivo - RotAttuale;
+
+	if (Reload>0.1) SetStato(2);
+	else
+	{
+		if (RotAttuale.Equals(RotObbiettivo, 4)) SetStato(1);
+		else SetStato(0);
+	}
 
 	Cannone->Eleva(DeltaRot.Pitch);
 

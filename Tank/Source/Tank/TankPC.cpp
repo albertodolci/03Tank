@@ -1,9 +1,10 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-#include "TankC.h"
 #include "TankPC.h"
+#include "TankC.h"
 #include "Engine/World.h"
 #include "Camera/PlayerCameraManager.h"
+#include "AimingComponent.h"
 
 void ATankPC::BeginPlay()
 {
@@ -21,6 +22,33 @@ void ATankPC::BeginPlay()
 
 }
 
+
+void ATankPC::SetPawn(APawn * InPawn)
+{
+	Super::SetPawn(InPawn);
+
+	if (InPawn)
+	{
+		auto CarroControllato = GetTank();
+		if (!CarroControllato) return;
+		CarroControllato->OnDeath.AddUniqueDynamic(this, &ATankPC::OnPossessedTankDeath);
+		UE_LOG(LogTemp, Warning, TEXT("Set Pawn abilitato!"));
+	}
+
+}
+
+void ATankPC::OnPossessedTankDeath()
+{
+	UE_LOG(LogTemp, Warning, TEXT("Evento On  Death"));
+
+	GetTank()->DestroyDelay();
+	StartSpectatingOnly();
+
+	
+
+}
+
+
 void ATankPC::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
@@ -35,7 +63,7 @@ void ATankPC::Mira()
 
 	if ( TrovaVista( HitLocation ) )
 	{
-		GetTank()->AimAt(HitLocation);
+		GetTank()->AimingC->AimAt(HitLocation);
     }
 
 }
@@ -106,6 +134,11 @@ ATankPC::ATankPC()
 	 crossX = 0.5;
 	 crossY = 0.3;
 
+}
+
+UAimingComponent * ATankPC::GetMirino()
+{
+	return GetTank()->AimingC;
 }
 
 ATankC* ATankPC::GetTank() const

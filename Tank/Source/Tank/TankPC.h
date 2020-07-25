@@ -28,8 +28,8 @@ public:
 
 	ATankPC();
 
-	UFUNCTION(BlueprintPure, Category = "SetUp")
-	class UAimingComponent* GetMirino();
+	//UFUNCTION(BlueprintPure, Category = "SetUp")
+	//class UAimingComponent* GetMirino();
 
 	class ATankC* GetTank() const;
 

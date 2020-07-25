@@ -8,8 +8,8 @@ void UMovement::MovimentoLaterale(float movimentoA)
 {
 	//UE_LOG(LogTemp, Warning, TEXT("Avanti %f"), movimentoA);
 	if (!CingoloDX || !CingoloSX) return;
-	CingoloDX->RichiestaMovimentoRG(-movimentoA);
-	CingoloSX->RichiestaMovimentoRG(movimentoA);
+	CingoloDX->RichiestaMovimento(-movimentoA);
+	CingoloSX->RichiestaMovimento(movimentoA);
 
 }
 
@@ -17,8 +17,8 @@ void UMovement::MovimentoAvanti(float movimentoA)
 {
 	//UE_LOG(LogTemp, Warning, TEXT("Laterale %f"), movimentoA);
 	if (!CingoloDX || !CingoloSX) return;
-	CingoloDX->RichiestaMovimentoFW(movimentoA);
-	CingoloSX->RichiestaMovimentoFW(movimentoA);
+	CingoloDX->RichiestaMovimento(movimentoA);
+	CingoloSX->RichiestaMovimento(movimentoA);
 }
 
 void UMovement::SetCingoli(UMeshCingolo * refSX, UMeshCingolo * refDX)

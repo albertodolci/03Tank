@@ -59,7 +59,9 @@ void UAimingComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActo
 
 void UAimingComponent::Spara()
 {
-	//	UE_LOG(LogTemp, Error, (TEXT("Sparo a Salve!!")));
+		UE_LOG(LogTemp, Error, (TEXT("Sparo a Salve!!")));
+		UE_LOG(LogTemp, Error, TEXT("reload = %i"), Reload);
+		UE_LOG(LogTemp, Error, TEXT("ammo inside = %i"), Munizioni);
 
 	if (Projectile  && GetWorld() && Reload <= 0 && Munizioni > 0)
 	{
@@ -72,7 +74,7 @@ void UAimingComponent::Spara()
 
 		Munizioni--;
 
-		UE_LOG(LogTemp, Error, TEXT("ammo = %i"), Munizioni);
+		
 
 		Bullet->Lancio(VelLancio);
 

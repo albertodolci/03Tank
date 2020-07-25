@@ -24,7 +24,7 @@ void UMeshTorretta::Eleva(float velrelativa)
 
 	float CambioLevatura = velrelativa * RotMaxSec * GetWorld()->DeltaTimeSeconds;
 
-	float NuovaLevatura = RelativeRotation.Pitch + CambioLevatura;
+	float NuovaLevatura = GetRelativeRotation().Pitch + CambioLevatura;
 
 	NuovaLevatura = FMath::Clamp<float>(NuovaLevatura, ElevazioneMin, ElevazioneMax);
 
@@ -42,7 +42,7 @@ void UMeshTorretta::Ruota(float velrelativa)
 
 	float CambioRotazione = velrelativa * RotHMaxSec * GetWorld()->DeltaTimeSeconds;
 
-	float NuovaRotazione = RelativeRotation.Yaw + CambioRotazione;
+	float NuovaRotazione = GetRelativeRotation().Yaw + CambioRotazione;
 
 	SetRelativeRotation(FRotator(0, NuovaRotazione, 0));
 

@@ -20,8 +20,8 @@ public:
 
 	virtual void BeginPlay() override;
 
-	UFUNCTION()
-	void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
+	//UFUNCTION()
+	//void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
 
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType,
 		FActorComponentTickFunction* ThisTickFunction) override;
@@ -30,17 +30,18 @@ public:
 		float ForzaMaxCingolo;
 
 	UFUNCTION(BlueprintCallable, Category = "Controls")
-		void  RichiestaMovimentoFW(float Movimento);
+		void  RichiestaMovimento(float Movimento);
 
-	UFUNCTION(BlueprintCallable, Category = "Controls")
-		void  RichiestaMovimentoRG(float Movimento);
+	//UFUNCTION(BlueprintCallable, Category = "Controls")
+	//	void  RichiestaMovimento(float Movimento);
 
 	void MovimentoReale(float &Movimento);
 
+	TArray<class AAmmortizzatore*> GetWheels();
+
 private:
 
-	float MovimentoAttualeFW;
-
-	float MovimentoAttualeRG;
+//	float MovimentoAttualeFW;
+//	float MovimentoAttualeRG;
 
 };

@@ -75,41 +75,31 @@ void ATankAIC::Tick(float DeltaTime)
 
      	GetTank()->AimingC->AimAt(Bersaglio->GetActorLocation());
 		
+		float dist = FVector::Dist(Bersaglio->GetActorLocation(), GetTank()->GetActorLocation());
+
 		MoveToActor(Bersaglio, RaggioMin);
 		
 		if (Timer > 0) Timer -= DeltaTime;
 		else
 		{
-
-			float dist = FVector::Dist(Bersaglio->GetActorLocation(), GetTank()->GetActorLocation());
-
 			if (GetTank()->AimingC->GetStato() == EAimingStatus::mira && dist < RaggioFuoco)
 			{
 				GetTank()->AimingC->Spara();
 				Timer = FMath::FRandRange(R_MIN, R_MAX);
+				//UE_LOG(LogTemp, Warning, TEXT("Distancex %f"), dist);
 			}
 
-
 		}
-
-		
-
 	}
-
 }
 
 void ATankAIC::OnPossessedTankDeath()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Evento On  Death"));
 
-	if (GetPawn())
-	{
-
+	//UE_LOG(LogTemp, Warning, TEXT("Evento On  Death"));
 	GetTank()->DestroyDelay();
-	GetPawn()->DetachFromControllerPendingDestroy();
-
-
-    }
+	//GetTank()->DetachFromControllerPendingDestroy();
+	DetachFromPawn();
 }
 
 ATankC* ATankAIC::GetTank() const

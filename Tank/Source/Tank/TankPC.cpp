@@ -3,7 +3,6 @@
 #include "TankPC.h"
 #include "TankC.h"
 #include "Engine/World.h"
-#include "Camera/PlayerCameraManager.h"
 #include "AimingComponent.h"
 
 void ATankPC::BeginPlay()
@@ -39,7 +38,7 @@ void ATankPC::SetPawn(APawn * InPawn)
 
 void ATankPC::OnPossessedTankDeath()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Evento On  Death"));
+	//UE_LOG(LogTemp, Warning, TEXT("Evento On  Death"));
 
 	GetTank()->DestroyDelay();
 	StartSpectatingOnly();
@@ -75,7 +74,9 @@ bool ATankPC::TrovaVista(FVector & Location)
 	GetViewportSize(viewX,viewY);
 	FVector2D AimZone = FVector2D(viewX*crossX, viewY*crossY);
 
-	//convertire tale zona in un vettore 3D	//FVector rrrrr;
+	//convertire tale zona in un vettore 3D
+
+	//FVector rrrrr;
 	FVector Direzione;
 
 	TrovaDirezione(AimZone, Direzione);
@@ -135,11 +136,12 @@ ATankPC::ATankPC()
 	 crossY = 0.3;
 
 }
-
+/*
 UAimingComponent * ATankPC::GetMirino()
 {
 	return GetTank()->AimingC;
 }
+*/
 
 ATankC* ATankPC::GetTank() const
 {

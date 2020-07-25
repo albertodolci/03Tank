@@ -51,6 +51,29 @@ void AProiettile::Tick(float DeltaTime)
 
 }
 
+void AProiettile::VDestroy(UObject* ToDestroy)
+{
+	if (!ToDestroy) return;
+	if (!ToDestroy->IsValidLowLevel()) return;
+	AActor* AnActor = Cast<AActor>(ToDestroy);
+	if (AnActor)
+	{
+		AnActor->K2_DestroyActor();
+		ToDestroy = NULL;
+	}
+	else
+	{
+		ToDestroy->ConditionalBeginDestroy();
+		ToDestroy = NULL;
+	}
+	GEngine->ForceGarbageCollection(true);
+}
+
+void AProiettile::SelfDestruction()
+{
+	VDestroy(this);
+}
+
 
 void AProiettile::Lancio(float speed)
 {
@@ -65,6 +88,8 @@ void AProiettile::OnHit(UPrimitiveComponent * HitComponent, AActor * OtherActor,
 	BlastImpact->Activate();
 	BlastLaunch->Deactivate();
 	Mesh->SetVisibility(false);
+	GetWorldTimerManager().SetTimer(timer1, this, &AProiettile::SelfDestruction, 2, false);
+
 	ForzaEsplosiva->FireImpulse();
 
 	UGameplayStatics::ApplyRadialDamage(
@@ -74,9 +99,7 @@ void AProiettile::OnHit(UPrimitiveComponent * HitComponent, AActor * OtherActor,
 		ForzaEsplosiva->Radius,
 		UDamageType::StaticClass(),
 		TArray<AActor*>()
-
 	);
-
 
 }
 

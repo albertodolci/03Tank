@@ -15,6 +15,7 @@ enum class EAimingStatus : uint8
 	generico
 };
 
+
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class TANK_API UAimingComponent : public UActorComponent
 {
@@ -51,10 +52,9 @@ protected:
 public:	
 
 	UPROPERTY(EditAnywhere, Category = "SetUp")
-		float ReloadTime;
+	float ReloadTime;
 
 	float Reload;
-
 
 	UPROPERTY(EditAnywhere, Category = "Fuoco")
 	float VelLancio;

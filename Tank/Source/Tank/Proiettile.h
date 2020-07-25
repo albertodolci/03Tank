@@ -45,6 +45,11 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	void VDestroy(UObject* ToDestroy);
+
+	void SelfDestruction();
+
+	FTimerHandle timer1;
 
 	void Lancio(float speed);
 
